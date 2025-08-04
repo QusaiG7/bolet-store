@@ -1,0 +1,242 @@
+/* style.css */
+
+/* الخطوط والتهيئة العامة */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  direction: rtl;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* خلفية متدرجة */
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #cce4ff, #88bfff);
+  color: #222;
+  padding-bottom: 100px;
+}
+
+/* رأس الصفحة */
+header {
+  background-color: #005baa;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+#cart-toggle {
+  background: #ffd700;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+#cart-toggle:hover {
+  background: #ffc107;
+}
+
+/* المنتجات */
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px 15px;
+}
+
+.product {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  padding: 15px;
+  text-align: center;
+  max-width: 220px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.product:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.product img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.add-to-cart {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+.add-to-cart:hover {
+  background-color: #005999;
+}
+
+/* الصور المتغيرة عند التحويم */
+.image-container {
+  position: relative;
+}
+
+.hover-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.4s;
+  border-radius: 8px;
+}
+
+.image-container:hover .hover-image {
+  opacity: 1;
+}
+
+/* السلة الجانبية */
+#cart {
+  position: fixed;
+  top: 0;
+  left: -400px;
+  width: 350px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+  padding: 20px;
+  transition: left 0.4s ease;
+  z-index: 2000;
+  overflow-y: auto;
+}
+
+#cart.open {
+  left: 0;
+}
+
+#cart h2 {
+  margin-bottom: 20px;
+}
+
+#cart-items {
+  list-style: none;
+  margin-bottom: 15px;
+}
+
+#cart-items li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+#cart-items button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+#cart-total {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 15px 0;
+}
+
+#checkout {
+  width: 100%;
+  padding: 10px;
+  background-color: #00b894;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#checkout:hover {
+  background-color: #009f7a;
+}
+
+#close-cart {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+}
+
+/* النافذة المنبثقة */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.popup a {
+  display: inline-block;
+  margin-top: 15px;
+  background-color: #25D366;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.popup a:hover {
+  background-color: #1ebe57;
+}
+
+.popup button {
+  display: block;
+  margin: 20px auto 0;
+  background: #ccc;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
