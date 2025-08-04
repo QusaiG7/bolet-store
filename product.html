@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تفاصيل المنتج - Bolet Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>تفاصيل المنتج</h1>
+    <nav>
+      <button class="back-button" onclick="location.href='products.html'">🔙 العودة</button>
+
+      <button id="cart-toggle">🛒 السلة</button>
+    </nav>
+  </header>
+
+  <main class="product-detail" style="padding: 20px; max-width: 600px; margin: auto;">
+    <div id="product-container">
+      <!-- هنا يتم تعبئة بيانات المنتج بواسطة جافاسكريبت -->
+    </div>
+  </main>
+
+  <aside id="cart">
+    <button id="close-cart">✖</button>
+    <h2>سلة المشتريات</h2>
+    <ul id="cart-items"></ul>
+    <p id="cart-total">الإجمالي: 0 درهم</p>
+    <button id="checkout">إتمام الطلب</button>
+  </aside>
+
+  <div id="thank-you-popup" class="popup hidden">
+    <div class="popup-content">
+      <p>✅ شكراً لتسوقك معنا!</p>
+      <a id="whatsapp-link" href="#" target="_blank">📱 إكمال الطلب عبر واتساب</a>
+      <button id="close-popup">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- عنصر التوست -->
+  <div id="toast-container"></div>
+
+  <script>
+    // بيانات المنتجات - اضف او عدل المنتجات هنا بسهولة
+    const productsData = [
+      {
+        id: 1,
+        name: "ميدالية كلب",
+        price: 15,
+        description: "ميدالية أنيقة لكلبك مع تصميم مميز.",
+        images: ["https://i.postimg.cc/qRTVGPcQ/2025-08-01-225224.png"],
+        colors: ["أحمر", "أزرق", "أسود"]
+      },
+      {
+        id: 2,
+        name: "ميدالية ثعلب",
+        price: 15,
+        description: "ميدالية ذات تصميم جميل على شكل ثعلب.",
+        images: ["https://i.postimg.cc/MTWVVGLD/2025-08-01-223945.png"],
+        colors: ["برتقالي", "أصفر", "بنفسجي"]
+      },
+      {
+        id: 3,
+        name: "ستاند هاتف قطة",
+        price: 15,
+        description: "ستاند هاتف عملي وجميل بشكل قطة لطيفة.",
+        images: ["https://i.postimg.cc/sgXL9Vk3/cf250c78-d243-4c2e-8296-60b9d181fd13.png"],
+        colors: ["وردي", "أبيض", "رمادي"]
+      },
+      {
+        id: 4,
+        name: "ميدلية حرف",
+        price: 20,
+        description: "ميدالية بتصميم حرف مميز مع خيارات ألوان متعددة.",
+        images: [
+          "https://i.postimg.cc/bYVVYXGM/2025-08-01-225452.png",
+          "https://i.postimg.cc/4yy8vP0B/2025-08-01-225524.png"
+        ],
+        colors: ["فضي", "ذهبي", "أسود"]
+      },
+      {
+        id: 5,
+        name: "ميدالية قطة",
+        price: 15,
+        description: "ميدالية على شكل قطة، جميلة وناعمة.",
+        images: ["https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png"],
+        colors: ["أخضر", "أزرق", "أصفر"]
+      }
+    ];
+
+    // دالة قراءة الـ id من الرابط
+    function getProductIdFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return Number(params.get("id"));
+    }
+
+    // دالة عرض بيانات المنتج داخل الصفحة
+    function showProduct(product) {
+      if (!product) {
+        document.getElementById("product-container").innerHTML = "<p>المنتج غير موجود.</p>";
+        return;
+      }
+
+      let imagesHTML = product.images.map(src => `<img src="${src}" alt="${product.name}" style="max-width: 100%; border-radius: 12px; margin-bottom: 10px;">`).join("");
+
+      let colorsOptionsHTML = product.colors.map(color => `
+        <button class="color-btn" style="margin: 5px; padding: 8px 12px; border-radius: 8px; cursor: pointer; border: 2px solid #ccc;">
+          ${color}
+        </button>
+      `).join("");
+
+      document.getElementById("product-container").innerHTML = `
+        <h2>${product.name}</h2>
+        <div class="product-images">${imagesHTML}</div>
+        <p style="margin: 15px 0;">${product.description}</p>
+        <p><strong>السعر: </strong>${product.price} درهم</p>
+        <div>
+          <p><strong>اختر اللون:</strong></p>
+          <div id="colors-container">${colorsOptionsHTML}</div>
+        </div>
+        <div style="margin-top: 15px;">
+          <label for="comment"><strong>اترك تعليقًا:</strong></label><br />
+          <textarea id="comment" rows="4" cols="50" style="width: 100%; border-radius: 8px; padding: 10px;"></textarea>
+        </div>
+        <button id="add-to-cart" style="margin-top: 20px; background-color: #0077cc; color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer;">
+          أضف للسلة
+        </button>
+      `;
+
+      // تفعيل اختيار اللون
+      const colorButtons = document.querySelectorAll(".color-btn");
+      colorButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          colorButtons.forEach(b => b.style.borderColor = "#ccc");
+          btn.style.borderColor = "#0077cc";
+        });
+      });
+
+      // زر إضافة للسلة
+      document.getElementById("add-to-cart").addEventListener("click", () => {
+        const selectedColor = [...colorButtons].find(b => b.style.borderColor === "rgb(0, 119, 204)");
+        if (!selectedColor) {
+          alert("يرجى اختيار لون المنتج أولاً.");
+          return;
+        }
+
+        const comment = document.getElementById("comment").value.trim();
+
+        // حفظ المنتج في localStorage للسلة مع اللون والتعليق
+        let cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+        cartData.push({
+          id: product.id,
+          name: `${product.name} - اللون: ${selectedColor.textContent}`,
+          price: product.price,
+          comment: comment
+        });
+        localStorage.setItem("cartData", JSON.stringify(cartData));
+        alert(`تم إضافة "${product.name}" إلى السلة.`);
+      });
+    }
+
+    // التنفيذ عند تحميل الصفحة
+    document.addEventListener("DOMContentLoaded", () => {
+      const productId = getProductIdFromURL();
+      const product = productsData.find(p => p.id === productId);
+      showProduct(product);
+    });
+  </script>
+</body>
+</html>
