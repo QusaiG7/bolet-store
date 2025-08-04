@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>منتجات Bolet Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>منتجات Bolet Store</h1>
+    <nav>
+      <button class="back-button" onclick="location.href='improve index.html'">🔙 العودة</button>
+
+      <button id="cart-toggle">🛒 السلة</button>
+    </nav>
+  </header>
+
+  <main class="products">
+
+    <a href="product.html?id=1" class="product" data-id="1" data-name="ميدالية كلب" data-price="15">
+      <img src="https://i.postimg.cc/qRTVGPcQ/2025-08-01-225224.png" alt="ميدالية كلب"/>
+      <h2>ميدالية كلب</h2>
+      <p>15 درهم</p>
+      <button class="add-to-cart">أضف للسلة</button>
+    </a>
+
+    <a href="product.html?id=2" class="product" data-id="2" data-name="ميدالية ثعلب" data-price="15">
+      <img src="https://i.postimg.cc/MTWVVGLD/2025-08-01-223945.png" alt="ميدالية ثعلب"/>
+      <h2>ميدالية ثعلب</h2>
+      <p>15 درهم</p>
+      <button class="add-to-cart">أضف للسلة</button>
+    </a>
+
+    <a href="product.html?id=3" class="product" data-id="3" data-name="ستاند هاتف قطة" data-price="15">
+      <img src="https://i.postimg.cc/sgXL9Vk3/cf250c78-d243-4c2e-8296-60b9d181fd13.png" alt="ستاند هاتف قطة"/>
+      <h2>ستاند هاتف قطة</h2>
+      <p>15 درهم</p>
+      <button class="add-to-cart">أضف للسلة</button>
+    </a>
+
+    <a href="product.html?id=5" class="product" data-id="5" data-name="ميدالية قطة" data-price="15">
+      <img src="https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png" alt="ميدالية قطة"/>
+      <h2>ميدالية قطة</h2>
+      <p>15 درهم</p>
+      <button class="add-to-cart">أضف للسلة</button>
+    </a>
+
+    <a href="product.html?id=4" class="product" data-id="4" data-name="ميدلية حرف" data-price="20">
+      <div class="image-container">
+        <img class="main-image" src="https://i.postimg.cc/bYVVYXGM/2025-08-01-225452.png" alt="ميدلية حرف"/>
+        <img class="hover-image" src="https://i.postimg.cc/4yy8vP0B/2025-08-01-225524.png" alt="ميدلية حرف - صورة ثانية"/>
+      </div>
+      <h2>ميدلية حرف</h2>
+      <p>20 درهم</p>
+      <button class="add-to-cart">أضف للسلة</button>
+    </a>
+
+  </main>
+
+  <aside id="cart">
+    <button id="close-cart">✖</button>
+    <h2>سلة المشتريات</h2>
+    <ul id="cart-items"></ul>
+    <p id="cart-total">الإجمالي: 0 درهم</p>
+    <button id="checkout">إتمام الطلب</button>
+  </aside>
+
+  <div id="thank-you-popup" class="popup hidden">
+    <div class="popup-content">
+      <p>✅ شكراً لتسوقك معنا! لا يوجد حاليا الدفع بالفيزا</p>
+      <a id="whatsapp-link" href="#" target="_blank">📱 إكمال الطلب عبر واتساب</a>
+      <button id="close-popup">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- عنصر التوست -->
+  <div id="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
