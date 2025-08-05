@@ -190,6 +190,38 @@ header h1 {
   cursor: pointer;
 }
 
+.back-button {
+  background: #ffd700;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+  margin: 15px;
+}
+
+.back-button:hover {
+  background: #ffc107;
+}
+
+.button-link {
+  background-color: #ffd700;
+  color: black;
+  padding: 10px 15px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 1rem;
+  display: inline-block;
+  transition: background 0.3s;
+  margin: 10px;
+}
+
+.button-link:hover {
+  background-color: #ffc107;
+}
+
+
 /* النافذة المنبثقة */
 .popup {
   position: fixed;
