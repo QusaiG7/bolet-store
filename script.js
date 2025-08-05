@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const total = cartData.reduce((sum, item) => sum + item.price, 0);
     const finalMessage = `مرحبًا، أرغب بشراء المنتجات التالية:\n${message}\n\nالإجمالي: ${total} درهم`;
 
-    whatsappLink.href = `https://wa.me/?text=${encodeURIComponent(finalMessage)}`;
+    whatsappLink.href = `https://wa.me/971507947709?text=${encodeURIComponent(finalMessage)}`;
   });
 
   // إغلاق النافذة المنبثقة
@@ -178,3 +178,4 @@ document.addEventListener("DOMContentLoaded", () => {
   displayProducts();
   updateCartUI();
 });
+
