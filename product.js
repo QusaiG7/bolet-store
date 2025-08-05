@@ -10,9 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
       id: 1,
       name: "ميدالية كلب",
       price: 15,
-      description: "ميدالية أنيقة لكلبك مع تصميم مميز.",
+      description: "ميدالية أنيقة لكلب مع تصميم مميز.",
       image: "https://i.postimg.cc/qRTVGPcQ/2025-08-01-225224.png",
-      colors: ["أحمر", "أزرق", "أخضر"]
+      colors: ["أبيض", "أزرق", "أحمر"]
     },
     {
       id: 2,
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: 15,
       description: "ميدالية ذات تصميم جميل على شكل ثعلب.",
       image: "https://i.postimg.cc/MTWVVGLD/2025-08-01-223945.png",
-      colors: ["أصفر", "برتقالي", "أسود"]
+      colors: ["أبيض", "أحمر", "أزرق"]
     },
     {
       id: 3,
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: 15,
       description: "ستاند هاتف عملي وجميل بشكل قطة لطيفة.",
       image: "https://i.postimg.cc/sgXL9Vk3/cf250c78-d243-4c2e-8296-60b9d181fd13.png",
-      colors: ["وردي", "بنفسجي", "أبيض"]
+      colors: ["أزرق", "أحمر", "أبيض" ,"أسود" ,"ملون"]
     },
     {
       id: 4,
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: 20,
       description: "ميدالية بتصميم حرف مميز مع خيارات ألوان متعددة.",
       image: "https://i.postimg.cc/bYVVYXGM/2025-08-01-225452.png",
-      colors: ["فضي", "ذهبي", "أسود"]
+      colors: ["أزرق و أحمر", "أزرق و أسود", "أزرق و أبيض" ,"أحمر و أسود" ,"أحمر و أبيض" ,"أسود و أبيض"]
     },
     {
       id: 5,
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: 15,
       description: "ميدالية على شكل قطة، جميلة وناعمة.",
       image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png",
-      colors: ["أزرق فاتح", "أخضر فاتح", "أبيض"]
+      colors: ["أزرق", "أحمر", "أبيض"]
     }
   ];
 
@@ -98,3 +98,4 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(`✔️ تم إضافة "${product.name}" باللون "${selectedColor}" إلى السلة!`);
   });
 });
+
