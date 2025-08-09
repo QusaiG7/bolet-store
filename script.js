@@ -47,6 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
       description: "ميدالية على شكل قطة، جميلة وناعمة.",
       image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png"
     }
+    {
+      id: 6,
+      name: "تخصيص",
+      price: 35,
+      description: "خصص مجسمك.",
+    }
   ];
 
   // تحميل السلة من localStorage
@@ -178,4 +184,5 @@ document.addEventListener("DOMContentLoaded", () => {
   displayProducts();
   updateCartUI();
 });
+
 
