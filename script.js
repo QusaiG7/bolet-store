@@ -10,6 +10,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const whatsappLink = document.getElementById("whatsapp-link");
   const toastContainer = document.getElementById("toast-container");
 
+  // إعدادات الخصم
+  const validDiscountCode = "BOLET10"; // الكود
+  const discountPercentage = 10; // نسبة الخصم %
+  let appliedDiscount = 0;
+  let discountUsed = false;
+
+  // عناصر إدخال الخصم
+  const discountCodeInput = document.getElementById("discount-code");
+  const applyDiscountBtn = document.getElementById("apply-discount");
+  const discountMessage = document.getElementById("discount-message");
+
   // بيانات المنتجات
   const productsData = [
     {
@@ -46,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: 15,
       description: "ميدالية على شكل قطة، جميلة وناعمة.",
       image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png"
-    }
+    },
     {
       id: 6,
       name: "تخصيص",
@@ -58,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // تحميل السلة من localStorage
   let cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 
-  // دالة عرض المنتجات في الصفحة
+  // عرض المنتجات
   function displayProducts() {
     const productsContainer = document.querySelector(".products");
     productsContainer.innerHTML = "";
@@ -82,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       productsContainer.appendChild(productDiv);
     });
 
-    // أضف مستمع حدث لأزرار إضافة للسلة
+    // أزرار الإضافة للسلة
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
@@ -91,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const product = productsData.find(p => p.id === id);
         if (!product) return;
 
-        // أضف المنتج للسلة
         cartData.push({ id: product.id, name: product.name, price: product.price });
         updateCartUI();
         showToast(`✔️ تم إضافة "${product.name}" للسلة`);
@@ -113,11 +123,37 @@ document.addEventListener("DOMContentLoaded", () => {
       total += item.price;
     });
 
-    cartTotal.textContent = `الإجمالي: ${total} درهم`;
-    cartToggle.textContent = `🛒 السلة${cartData.length > 0 ? ` (${cartData.length})` : ""}`;
+    // تطبيق الخصم
+    if (appliedDiscount > 0) {
+      const discountAmount = (total * appliedDiscount).toFixed(2);
+      const newTotal = (total - discountAmount).toFixed(2);
+      cartTotal.textContent = `الإجمالي: ${total} درهم (بعد الخصم: ${newTotal} درهم)`;
+    } else {
+      cartTotal.textContent = `الإجمالي: ${total} درهم`;
+    }
 
+    cartToggle.textContent = `🛒 السلة${cartData.length > 0 ? ` (${cartData.length})` : ""}`;
     localStorage.setItem("cartData", JSON.stringify(cartData));
   }
+
+  // تطبيق كود الخصم
+  applyDiscountBtn.addEventListener("click", () => {
+    if (discountUsed) {
+      discountMessage.textContent = "❌ الكود استُخدم بالفعل.";
+      return;
+    }
+
+    const code = discountCodeInput.value.trim();
+    if (code === validDiscountCode) {
+      appliedDiscount = discountPercentage / 100;
+      discountUsed = true;
+      discountMessage.textContent = `✔️ تم تطبيق خصم ${discountPercentage}%`;
+      applyDiscountBtn.disabled = true;
+    } else {
+      discountMessage.textContent = "❌ كود غير صالح";
+    }
+    updateCartUI();
+  });
 
   // إظهار رسالة توست
   function showToast(message) {
@@ -135,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 10);
   }
 
-  // حدث حذف عنصر من السلة
+  // حذف عنصر من السلة
   cartItems.addEventListener("click", (e) => {
     if (e.target.classList.contains("remove-item")) {
       const index = parseInt(e.target.getAttribute("data-index"));
@@ -168,8 +204,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((item, i) => `${i + 1}. ${item.name} - ${item.price} درهم`)
       .join("\n");
     const total = cartData.reduce((sum, item) => sum + item.price, 0);
-    const finalMessage = `مرحبًا، أرغب بشراء المنتجات التالية:\n${message}\n\nالإجمالي: ${total} درهم`;
+    const finalTotal = appliedDiscount > 0 ? total - (total * appliedDiscount) : total;
 
+    const finalMessage = `مرحبًا، أرغب بشراء المنتجات التالية:\n${message}\n\nالإجمالي: ${finalTotal} درهم`;
     whatsappLink.href = `https://wa.me/971507947709?text=${encodeURIComponent(finalMessage)}`;
   });
 
@@ -177,12 +214,17 @@ document.addEventListener("DOMContentLoaded", () => {
   closePopup.addEventListener("click", () => {
     thankYouPopup.classList.add("hidden");
     cartData = [];
+
+    appliedDiscount = 0;
+    discountUsed = false;
+    discountCodeInput.value = "";
+    discountMessage.textContent = "";
+    applyDiscountBtn.disabled = false;
+
     updateCartUI();
   });
 
-  // عرض المنتجات وتحديث السلة عند التحميل
+  // تشغيل أولي
   displayProducts();
   updateCartUI();
 });
-
-
