@@ -10,66 +10,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const whatsappLink = document.getElementById("whatsapp-link");
   const toastContainer = document.getElementById("toast-container");
 
-  // إعدادات الخصم
-  const validDiscountCode = "BOLET10"; // الكود
-  const discountPercentage = 10; // نسبة الخصم %
-  let appliedDiscount = 0;
-  let discountUsed = false;
+  // ✅ قائمة أكواد الخصم مع نسبها
+  const discountCodes = [
+    { code: "BOLET10", percentage: 10 },
+    { code: "SAVE20", percentage: 20 },
+    { code: "FALL15", percentage: 15 }
+  ];
 
-  // عناصر إدخال الخصم
-  const discountCodeInput = document.getElementById("discount-code");
-  const applyDiscountBtn = document.getElementById("apply-discount");
-  const discountMessage = document.getElementById("discount-message");
+  let appliedDiscount = 0;
+  let discountUsed = false; // يمنع إعادة الاستخدام
 
   // بيانات المنتجات
   const productsData = [
-    {
-      id: 1,
-      name: "ميدالية كلب",
-      price: 15,
-      description: "ميدالية أنيقة لكلبك مع تصميم مميز.",
-      image: "https://i.postimg.cc/qRTVGPcQ/2025-08-01-225224.png"
-    },
-    {
-      id: 2,
-      name: "ميدالية ثعلب",
-      price: 15,
-      description: "ميدالية ذات تصميم جميل على شكل ثعلب.",
-      image: "https://i.postimg.cc/MTWVVGLD/2025-08-01-223945.png"
-    },
-    {
-      id: 3,
-      name: "ستاند هاتف قطة",
-      price: 15,
-      description: "ستاند هاتف عملي وجميل بشكل قطة لطيفة.",
-      image: "https://i.postimg.cc/sgXL9Vk3/cf250c78-d243-4c2e-8296-60b9d181fd13.png"
-    },
-    {
-      id: 4,
-      name: "ميدلية حرف",
-      price: 20,
-      description: "ميدالية بتصميم حرف مميز مع خيارات ألوان متعددة.",
-      image: "https://i.postimg.cc/bYVVYXGM/2025-08-01-225452.png"
-    },
-    {
-      id: 5,
-      name: "ميدالية قطة",
-      price: 15,
-      description: "ميدالية على شكل قطة، جميلة وناعمة.",
-      image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png"
-    },
-    {
-      id: 6,
-      name: "تخصيص",
-      price: 35,
-      description: "خصص مجسمك.",
-    }
+    { id: 1, name: "ميدالية كلب", price: 15, image: "https://i.postimg.cc/qRTVGPcQ/2025-08-01-225224.png" },
+    { id: 2, name: "ميدالية ثعلب", price: 15, image: "https://i.postimg.cc/MTWVVGLD/2025-08-01-223945.png" },
+    { id: 3, name: "ستاند هاتف قطة", price: 15, image: "https://i.postimg.cc/sgXL9Vk3/cf250c78-d243-4c2e-8296-60b9d181fd13.png" },
+    { id: 4, name: "ميدلية حرف", price: 20, image: "https://i.postimg.cc/bYVVYXGM/2025-08-01-225452.png" },
+    { id: 5, name: "ميدالية قطة", price: 15, image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png" },
+    { id: 6, name: "تخصيص", price: 35, image: "" }
   ];
 
   // تحميل السلة من localStorage
   let cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 
-  // عرض المنتجات
+  // دالة عرض المنتجات
   function displayProducts() {
     const productsContainer = document.querySelector(".products");
     productsContainer.innerHTML = "";
@@ -93,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       productsContainer.appendChild(productDiv);
     });
 
-    // أزرار الإضافة للسلة
+    // إضافة منتجات للسلة
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
@@ -115,19 +79,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let total = 0;
     cartData.forEach((item, index) => {
       const li = document.createElement("li");
-      li.innerHTML = `
-        ${item.name} - ${item.price} درهم
-        <button class="remove-item" data-index="${index}">❌</button>
-      `;
+      li.innerHTML = `${item.name} - ${item.price} درهم <button class="remove-item" data-index="${index}">❌</button>`;
       cartItems.appendChild(li);
       total += item.price;
     });
 
-    // تطبيق الخصم
+    // تطبيق الخصم إذا موجود
     if (appliedDiscount > 0) {
-      const discountAmount = (total * appliedDiscount).toFixed(2);
-      const newTotal = (total - discountAmount).toFixed(2);
-      cartTotal.textContent = `الإجمالي: ${total} درهم (بعد الخصم: ${newTotal} درهم)`;
+      cartTotal.textContent = `الإجمالي: ${total - appliedDiscount} درهم (خصم ${appliedDiscount} درهم)`;
     } else {
       cartTotal.textContent = `الإجمالي: ${total} درهم`;
     }
@@ -136,32 +95,12 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("cartData", JSON.stringify(cartData));
   }
 
-  // تطبيق كود الخصم
-  applyDiscountBtn.addEventListener("click", () => {
-    if (discountUsed) {
-      discountMessage.textContent = "❌ الكود استُخدم بالفعل.";
-      return;
-    }
-
-    const code = discountCodeInput.value.trim();
-    if (code === validDiscountCode) {
-      appliedDiscount = discountPercentage / 100;
-      discountUsed = true;
-      discountMessage.textContent = `✔️ تم تطبيق خصم ${discountPercentage}%`;
-      applyDiscountBtn.disabled = true;
-    } else {
-      discountMessage.textContent = "❌ كود غير صالح";
-    }
-    updateCartUI();
-  });
-
-  // إظهار رسالة توست
+  // توست
   function showToast(message) {
     const toast = document.createElement("div");
     toast.className = "toast";
     toast.textContent = message;
     toastContainer.appendChild(toast);
-
     setTimeout(() => {
       toast.classList.add("show");
       setTimeout(() => {
@@ -171,24 +110,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 10);
   }
 
-  // حذف عنصر من السلة
+  // حذف من السلة
   cartItems.addEventListener("click", (e) => {
     if (e.target.classList.contains("remove-item")) {
       const index = parseInt(e.target.getAttribute("data-index"));
-      const removedName = cartData[index].name;
       cartData.splice(index, 1);
       updateCartUI();
-      showToast(`🗑️ تم حذف "${removedName}" من السلة`);
+      showToast(`🗑️ تم حذف العنصر من السلة`);
     }
   });
 
   // فتح/إغلاق السلة
-  cartToggle.addEventListener("click", () => {
-    cart.classList.toggle("open");
-  });
+  cartToggle.addEventListener("click", () => cart.classList.toggle("open"));
+  closeCart.addEventListener("click", () => cart.classList.remove("open"));
 
-  closeCart.addEventListener("click", () => {
-    cart.classList.remove("open");
+  // ✅ تطبيق أكواد الخصم
+  document.getElementById("apply-discount").addEventListener("click", () => {
+    if (discountUsed) return;
+
+    const inputCode = document.getElementById("discount-code").value.trim().toUpperCase();
+    const found = discountCodes.find(dc => dc.code.toUpperCase() === inputCode);
+
+    if (found) {
+      const totalBefore = cartData.reduce((sum, item) => sum + item.price, 0);
+      appliedDiscount = (totalBefore * found.percentage) / 100;
+      updateCartUI();
+      document.getElementById("discount-message").textContent = `✔️ تم تطبيق الخصم ${found.percentage}%`;
+      discountUsed = true;
+      document.getElementById("apply-discount").disabled = true;
+    } else {
+      document.getElementById("discount-message").textContent = "❌ الكود غير صحيح";
+    }
   });
 
   // إتمام الطلب
@@ -197,16 +149,12 @@ document.addEventListener("DOMContentLoaded", () => {
       showToast("❗️السلة فارغة");
       return;
     }
-
     thankYouPopup.classList.remove("hidden");
 
-    const message = cartData
-      .map((item, i) => `${i + 1}. ${item.name} - ${item.price} درهم`)
-      .join("\n");
-    const total = cartData.reduce((sum, item) => sum + item.price, 0);
-    const finalTotal = appliedDiscount > 0 ? total - (total * appliedDiscount) : total;
+    const message = cartData.map((item, i) => `${i + 1}. ${item.name} - ${item.price} درهم`).join("\n");
+    const total = cartData.reduce((sum, item) => sum + item.price, 0) - appliedDiscount;
+    const finalMessage = `مرحبًا، أرغب بشراء المنتجات التالية:\n${message}\n\nالإجمالي: ${total} درهم`;
 
-    const finalMessage = `مرحبًا، أرغب بشراء المنتجات التالية:\n${message}\n\nالإجمالي: ${finalTotal} درهم`;
     whatsappLink.href = `https://wa.me/971507947709?text=${encodeURIComponent(finalMessage)}`;
   });
 
@@ -214,17 +162,15 @@ document.addEventListener("DOMContentLoaded", () => {
   closePopup.addEventListener("click", () => {
     thankYouPopup.classList.add("hidden");
     cartData = [];
-
     appliedDiscount = 0;
     discountUsed = false;
-    discountCodeInput.value = "";
-    discountMessage.textContent = "";
-    applyDiscountBtn.disabled = false;
-
+    document.getElementById("discount-code").value = "";
+    document.getElementById("discount-message").textContent = "";
+    document.getElementById("apply-discount").disabled = false;
     updateCartUI();
   });
 
-  // تشغيل أولي
+  // تحميل المنتجات وتحديث السلة
   displayProducts();
   updateCartUI();
 });
