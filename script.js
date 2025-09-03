@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const discountCodes = [
     { code: "BOLET10", percentage: 10 },
     { code: "SAVE20", percentage: 20 },
-    { code: "FALL15", percentage: 15 }
+    { code: "Frindshep50", percentage: 50 }
   ];
 
   let appliedDiscount = 0;
@@ -174,3 +174,4 @@ document.addEventListener("DOMContentLoaded", () => {
   displayProducts();
   updateCartUI();
 });
+
