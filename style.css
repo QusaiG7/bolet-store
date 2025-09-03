@@ -273,3 +273,33 @@ header h1 {
   display: none;
 }
 
+
+#discount-section {
+  margin: 15px 0;
+}
+
+#discount-section input {
+  width: 70%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#discount-section button {
+  padding: 6px 10px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+#discount-section button:hover {
+  background-color: #e68900;
+}
+
+#cart-total s {
+  color: red;
+  margin-left: 8px;
+}
