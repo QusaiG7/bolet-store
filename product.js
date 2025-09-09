@@ -46,6 +46,14 @@ document.addEventListener("DOMContentLoaded", () => {
       image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png",
       colors: ["أزرق", "أحمر", "أبيض"]
     }
+    {
+      id: 7,
+      name: "ميدلية اسم",
+      price: 29,
+      description: "ميدالية بتصميم اسمك المميز مع خيارات ألوان متعددة.",
+      image: "https://i.postimg.cc/wjqQC78Z/2025-08-07-224236.png",
+      colors: ["أزرق و أحمر", "أزرق و أسود", "أزرق و أبيض" ,"أحمر و أسود" ,"أحمر و أبيض" ,"أسود و أبيض"]
+    }
   ];
 
   // جلب id المنتج من الرابط
@@ -98,4 +106,5 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(`✔️ تم إضافة "${product.name}" باللون "${selectedColor}" إلى السلة!`);
   });
 });
+
 
