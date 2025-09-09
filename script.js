@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: 4, name: "ميدلية حرف", price: 20, image: "https://i.postimg.cc/bYVVYXGM/2025-08-01-225452.png" },
     { id: 5, name: "ميدالية قطة", price: 15, image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png" },
     { id: 6, name: "تخصيص", price: 35, image: "" }
+    { id: 7, name: "ميدالية اسم", price: 29, image: "https://i.postimg.cc/wjqQC78Z/2025-08-07-224236.png" }
   ];
 
   // تحميل السلة من localStorage
@@ -174,4 +175,5 @@ document.addEventListener("DOMContentLoaded", () => {
   displayProducts();
   updateCartUI();
 });
+
 
