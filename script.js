@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let appliedDiscount = 0;
   let discountUsed = false; // يمنع إعادة الاستخدام
 
-  // بيانات المنتجات
+  // بيانات المنتجات (موجودة لو تحب تضيف تلقائي مستقبلاً)
   const productsData = [
     { id: 1, name: "ميدالية كلب", price: 15, image: "https://i.postimg.cc/qRTVGPcQ/2025-08-01-225224.png" },
     { id: 2, name: "ميدالية ثعلب", price: 15, image: "https://i.postimg.cc/MTWVVGLD/2025-08-01-223945.png" },
@@ -34,43 +34,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // تحميل السلة من localStorage
   let cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 
-  // دالة عرض المنتجات
-  function displayProducts() {
-    const productsContainer = document.querySelector(".products");
-    productsContainer.innerHTML = "";
+  // ✅ ربط المنتجات الجاهزة في HTML بدل ما نفرغها
+  function bindProducts() {
+    document.querySelectorAll(".product").forEach(productDiv => {
+      const id = parseInt(productDiv.getAttribute("data-id"));
+      const name = productDiv.getAttribute("data-name");
+      const price = parseFloat(productDiv.getAttribute("data-price"));
 
-    productsData.forEach(product => {
-      const productDiv = document.createElement("div");
-      productDiv.classList.add("product");
-      productDiv.setAttribute("data-id", product.id);
-      productDiv.setAttribute("data-name", product.name);
-      productDiv.setAttribute("data-price", product.price);
-
-      productDiv.innerHTML = `
-        <a href="product.html?id=${product.id}" style="text-decoration:none; color: inherit;">
-          <img src="${product.image}" alt="${product.name}" />
-          <h2>${product.name}</h2>
-          <p>${product.price} درهم</p>
-        </a>
-        <button class="add-to-cart">أضف للسلة</button>
-      `;
-
-      productsContainer.appendChild(productDiv);
-    });
-
-    // إضافة منتجات للسلة
-    document.querySelectorAll(".add-to-cart").forEach(button => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        const productDiv = button.closest(".product");
-        const id = parseInt(productDiv.getAttribute("data-id"));
-        const product = productsData.find(p => p.id === id);
-        if (!product) return;
-
-        cartData.push({ id: product.id, name: product.name, price: product.price });
-        updateCartUI();
-        showToast(`✔️ تم إضافة "${product.name}" للسلة`);
-      });
+      const button = productDiv.querySelector(".add-to-cart");
+      if (button) {
+        button.addEventListener("click", (e) => {
+          e.preventDefault();
+          cartData.push({ id, name, price });
+          updateCartUI();
+          showToast(`✔️ تم إضافة "${name}" للسلة`);
+        });
+      }
     });
   }
 
@@ -171,10 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartUI();
   });
 
-  // تحميل المنتجات وتحديث السلة
-  displayProducts();
+  // ✅ تفعيل المنتجات وتحديث السلة
+  bindProducts();
   updateCartUI();
 });
-
-
-
