@@ -5,9 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>منتجات Bolet Store</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* 🔹 الشريط العلوي */
+    .top-banner {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      background: #e91e63;   /* لون خلفية الشريط */
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      z-index: 3000;         /* يخليه فوق كل العناصر */
+    }
+
+    /* 🔹 نزّل الصفحة شوي عشان الشريط ما يغطي الهيدر */
+    body {
+      margin-top: 50px;
+    }
+  </style>
 </head>
 
 <body>
+  <!-- ✅ الشريط العلوي -->
+  <div class="top-banner">🎉 خصم 20% على أول طلب! استخدم كود: WELCOME20 🎁</div>
+
   <header>
     <h1>منتجات Bolet Store</h1>
     <nav>
@@ -104,6 +128,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
