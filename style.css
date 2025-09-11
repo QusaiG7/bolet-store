@@ -303,3 +303,24 @@ header h1 {
   color: red;
   margin-left: 8px;
 }
+
+/* الشريط العلوي */
+.top-bar {
+  width: 100%;
+  background: linear-gradient(90deg, #ff9800, #ff5722); /* متدرج برتقالي */
+  color: white;
+  text-align: right; /* النص يبدأ من اليمين */
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 3000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* تعديل الهيدر حتى ما يختفي تحت الشريط */
+header {
+  margin-top: 50px; /* يبعد الهيدر تحت الشريط */
+}
