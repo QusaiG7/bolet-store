@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ قائمة أكواد الخصم مع نسبها
   const discountCodes = [
     { code: "BOLET10", percentage: 10 },
-    { code: "SAVE20", percentage: 20 },
+    { code: "WELCOME20", percentage: 20 },
     { code: "BS1", percentage: 10 }
   ];
 
@@ -154,4 +154,5 @@ document.addEventListener("DOMContentLoaded", () => {
   bindProducts();
   updateCartUI();
 });
+
 
