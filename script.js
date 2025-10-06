@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const whatsappLink = document.getElementById("whatsapp-link");
   const toastContainer = document.getElementById("toast-container");
 
-  // ✅ قائمة أكواد الخصم مع نسبها
   const discountCodes = [
     { code: "BOLET10", percentage: 10 },
     { code: "WELCOME20", percentage: 20 },
@@ -18,23 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   let appliedDiscount = 0;
-  let discountUsed = false; // يمنع إعادة الاستخدام
+  let discountUsed = false;
 
-  // بيانات المنتجات (موجودة لو تحب تضيف تلقائي مستقبلاً)
-  const productsData = [
-    { id: 1, name: "ميدالية كلب", price: 15, image: "https://i.postimg.cc/qRTVGPcQ/2025-08-01-225224.png" },
-    { id: 2, name: "ميدالية ثعلب", price: 15, image: "https://i.postimg.cc/MTWVVGLD/2025-08-01-223945.png" },
-    { id: 3, name: "ستاند هاتف قطة", price: 15, image: "https://i.postimg.cc/sgXL9Vk3/cf250c78-d243-4c2e-8296-60b9d181fd13.png" },
-    { id: 4, name: "ميدلية حرف", price: 20, image: "https://i.postimg.cc/bYVVYXGM/2025-08-01-225452.png" },
-    { id: 5, name: "ميدالية قطة", price: 15, image: "https://i.postimg.cc/jq6NvyTh/2025-08-01-231111.png" },
-    { id: 6, name: "تخصيص", price: 30, image: "" },
-    { id: 7, name: "ميدالية اسم", price: 25, image: "https://i.postimg.cc/wjqQC78Z/2025-08-07-224236.png" }
-  ];
-
-  // تحميل السلة من localStorage
   let cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 
-  // ✅ ربط المنتجات الجاهزة في HTML بدل ما نفرغها
   function bindProducts() {
     document.querySelectorAll(".product").forEach(productDiv => {
       const id = parseInt(productDiv.getAttribute("data-id"));
@@ -53,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // تحديث واجهة السلة
   function updateCartUI() {
     cartItems.innerHTML = "";
     let total = 0;
@@ -64,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
       total += item.price;
     });
 
-    // تطبيق الخصم إذا موجود
     if (appliedDiscount > 0) {
       cartTotal.textContent = `الإجمالي: ${total - appliedDiscount} درهم (خصم ${appliedDiscount} درهم)`;
     } else {
@@ -73,9 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cartToggle.textContent = `🛒 السلة${cartData.length > 0 ? ` (${cartData.length})` : ""}`;
     localStorage.setItem("cartData", JSON.stringify(cartData));
+
+    renderPayPalButton();
   }
 
-  // توست
   function showToast(message) {
     const toast = document.createElement("div");
     toast.className = "toast";
@@ -90,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 10);
   }
 
-  // حذف من السلة
   cartItems.addEventListener("click", (e) => {
     if (e.target.classList.contains("remove-item")) {
       const index = parseInt(e.target.getAttribute("data-index"));
@@ -100,11 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // فتح/إغلاق السلة
   cartToggle.addEventListener("click", () => cart.classList.toggle("open"));
   closeCart.addEventListener("click", () => cart.classList.remove("open"));
 
-  // ✅ تطبيق أكواد الخصم
   document.getElementById("apply-discount").addEventListener("click", () => {
     if (discountUsed) return;
 
@@ -123,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // إتمام الطلب
   checkout.addEventListener("click", () => {
     if (cartData.length === 0) {
       showToast("❗️السلة فارغة");
@@ -138,7 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     whatsappLink.href = `https://wa.me/971507947709?text=${encodeURIComponent(finalMessage)}`;
   });
 
-  // إغلاق النافذة المنبثقة
   closePopup.addEventListener("click", () => {
     thankYouPopup.classList.add("hidden");
     cartData = [];
@@ -150,10 +130,38 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartUI();
   });
 
-  // ✅ تفعيل المنتجات وتحديث السلة
+  function renderPayPalButton() {
+    const total = cartData.reduce((sum, item) => sum + item.price, 0) - appliedDiscount;
+    const container = document.getElementById("paypal-button-container");
+    container.innerHTML = "";
+
+    if (total <= 0) return;
+
+    paypal.Buttons({
+      style: { layout: 'vertical', color: 'blue', shape: 'rect', label: 'paypal' },
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: { currency_code: "AED", value: total.toFixed(2) },
+            description: cartData.map(item => item.name).join(", ")
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert(`✅ تم الدفع بنجاح بواسطة ${details.payer.name.given_name}`);
+          cartData = [];
+          appliedDiscount = 0;
+          discountUsed = false;
+          document.getElementById("discount-code").value = "";
+          document.getElementById("discount-message").textContent = "";
+          document.getElementById("apply-discount").disabled = false;
+          updateCartUI();
+        });
+      }
+    }).render("#paypal-button-container");
+  }
+
   bindProducts();
   updateCartUI();
 });
-
-
-
