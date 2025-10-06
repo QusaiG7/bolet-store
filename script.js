@@ -21,23 +21,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 
-  function bindProducts() {
-    document.querySelectorAll(".product").forEach(productDiv => {
-      const id = parseInt(productDiv.getAttribute("data-id"));
-      const name = productDiv.getAttribute("data-name");
-      const price = parseFloat(productDiv.getAttribute("data-price"));
+function bindProducts() {
+  document.querySelectorAll(".product").forEach(productDiv => {
+    const id = parseInt(productDiv.getAttribute("data-id"));
+    const name = productDiv.getAttribute("data-name");
+    const price = parseFloat(productDiv.getAttribute("data-price"));
 
-      const button = productDiv.querySelector(".add-to-cart");
-      if (button) {
-        button.addEventListener("click", (e) => {
-          e.preventDefault();
-          cartData.push({ id, name, price });
-          updateCartUI();
-          showToast(`✔️ تم إضافة "${name}" للسلة`);
-        });
-      }
-    });
-  }
+    const button = productDiv.querySelector(".add-to-cart");
+    if (button) {
+      button.addEventListener("click", (e) => {
+        e.preventDefault(); // ❌ يمنع الرابط من الفتح
+        e.stopPropagation(); // يمنع الحدث من الانتقال للأعلى
+        cartData.push({ id, name, price });
+        updateCartUI();
+        showToast(`✔️ تم إضافة "${name}" للسلة`);
+      });
+    }
+  });
+}
+
 
   function updateCartUI() {
     cartItems.innerHTML = "";
@@ -167,4 +169,5 @@ function renderPayPalButton() {
   bindProducts();
   updateCartUI();
 });
+
 
