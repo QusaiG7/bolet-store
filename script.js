@@ -130,38 +130,41 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartUI();
   });
 
-  function renderPayPalButton() {
-    const total = cartData.reduce((sum, item) => sum + item.price, 0) - appliedDiscount;
-    const container = document.getElementById("paypal-button-container");
-    container.innerHTML = "";
+function renderPayPalButton() {
+  const total = cartData.reduce((sum, item) => sum + item.price, 0) - appliedDiscount;
+  const container = document.getElementById("paypal-button-container");
+  container.innerHTML = "";
 
-    if (total <= 0) return;
+  if (total <= 0 || !window.paypal) return; // تأكد من وجود paypal SDK
 
-    paypal.Buttons({
-      style: { layout: 'vertical', color: 'blue', shape: 'rect', label: 'paypal' },
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{
-            amount: { currency_code: "AED", value: total.toFixed(2) },
-            description: cartData.map(item => item.name).join(", ")
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert(`✅ تم الدفع بنجاح بواسطة ${details.payer.name.given_name}`);
-          cartData = [];
-          appliedDiscount = 0;
-          discountUsed = false;
-          document.getElementById("discount-code").value = "";
-          document.getElementById("discount-message").textContent = "";
-          document.getElementById("apply-discount").disabled = false;
-          updateCartUI();
-        });
-      }
-    }).render("#paypal-button-container");
+  paypal.Buttons({
+    style: { layout: 'vertical', color: 'blue', shape: 'rect', label: 'paypal' },
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: { currency_code: "AED", value: total.toFixed(2) },
+          description: cartData.map(item => item.name).join(", ")
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert(`✅ تم الدفع بنجاح بواسطة ${details.payer.name.given_name}`);
+        cartData = [];
+        appliedDiscount = 0;
+        discountUsed = false;
+        document.getElementById("discount-code").value = "";
+        document.getElementById("discount-message").textContent = "";
+        document.getElementById("apply-discount").disabled = false;
+        updateCartUI();
+      });
+    }
+  }).render("#paypal-button-container");
+}
+
   }
 
   bindProducts();
   updateCartUI();
 });
+
